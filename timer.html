@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <style>
+        body {
+            padding: 0px;
+            margin: 0px;
+            box-sizing: border-box;
+            background-color: #40baed;
+        }
+
+        .container {
+            margin: 100px auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            max-width: 70%;
+        }
+
+        .timer {
+            display: flex;
+            justify-content: space-between;
+            gap: 5vh;
+            padding: 20px;
+            margin: 0px auto;
+        }
+
+        .dis {
+            display: flex;
+            margin: 20px auto;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            flex-basis: 25%;
+            max-width: 25%;
+        }
+
+        .dis div:nth-child(1) {
+            min-width: 200px;
+            height: 200px;
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+            grid-template-columns: 1fr;
+            justify-content: space-around;
+            flex-direction: column;
+            align-items: center;
+            background-color: #090041;
+            text-align: center;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+        }
+
+        .dis input {
+            width: 80px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+            border: none;
+            border-radius: 4px;
+            padding-left: 12px;
+            outline: none;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        p {
+            font-size: 100px;
+            margin: 0px;
+            margin-top: 10px;
+        }
+
+        .text {
+            font-size: 22px;
+        }
+
+        .buttons {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        #setTimer {
+            background-color: #090041;
+        }
+
+        #reset {
+            background-color: #ff0000;
+        }
+
+        #stop {
+            background-color: #0d6aff;
+        }
+
+        #start {
+            background-color: #b220fb;
+        }
+
+        .buttons:first-child {
+            margin-left: 65px;
+        }
+
+        nav {
+            background-color: #090041;
+            color: white;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: space-between;
+        }
+
+        nav div {
+            width: fit-content;
+            display: flex;
+            gap: 20px;
+            margin: 10px;
+        }
+
+        #instructions a {
+            margin-left: 60px;
+            background-color: #090041;
+            color: white;
+            width: fit-content;
+            padding: 5px;
+            text-decoration: none;
+        }
+
+        footer {
+            background-color: #090041;
+            color: white;
+            padding-left: 40px;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div><img src="clock.jpeg.png" width="60px" height="60px"/><h1>Countdown Timer</h1></div>
+        <div>
+            <h3>Home</h3>
+            <h3>Timer</h3>
+            <h3>Clock</h3>
+            <h3>Calendar</h3>
+        </div>
+    </nav>
+    <h3 id="instructions"><a href="#int">click here for instructions</a></h3>
+    <div class="container">
+        <div class="timer">
+            <div class="dis">
+                <div>
+                    <p id="days">00</p>
+                    <span class="text">Days</span>
+                </div>
+                <input id="daysIn" type="number" min="0" value="0" />
+            </div>
+            <div class="dis">
+                <div>
+                    <p id="hours">00</p>
+                    <span class="text">Hours</span>
+                </div>
+                <input id="hoursIn" type="number" min="0" max="23" value="0" />
+            </div>
+            <div class="dis">
+                <div>
+                    <p id="mins">00</p>
+                    <span class="text">Mins</span>
+                </div>
+                <input id="minsIn" type="number" min="0" max="59" value="0" />
+            </div>
+            <div class="dis">
+                <div>
+                    <p id="secs">00</p>
+                    <span class="text">Secs</span>
+                </div>
+                <input id="secsIn" type="number" min="0" max="59" value="0" />
+            </div>
+        </div>
+        <div class="buttons">
+            <button class="buttons" id="setTimer">set timer</button>
+            <button class="buttons" id="start">Start / resume</button>
+            <button class="buttons" id="stop">pause</button>
+            <button class="buttons" id="reset">reset</button>
+        </div>
+    </div>
+    <footer>
+        <h2 id="int">Instructions</h2>
+        <div>1.Enter the values in the inputs.</div>
+        <div>2.Press the Set Timer Button to set the timer.</div>
+        <div>3.Press the Start/Resume Button to start the timer.</div>
+        <div>4.Pause the Timer if you want to pause.</div>
+        <div>5.Press Start/Resume Button to resume the timer.</div>
+        <div>6.Press the Reset Button to reset the values.</div>
+    </footer>
+    <script>
+        let timer;
+        let totalSeconds = 0;
+        let running = false;
+
+        function setTimer() {
+            const days = parseInt(document.getElementById('daysIn').value, 10) || 0;
+            const hours = parseInt(document.getElementById('hoursIn').value, 10) || 0;
+            const mins = parseInt(document.getElementById('minsIn').value, 10) || 0;
+            const secs = parseInt(document.getElementById('secsIn').value, 10) || 0;
+            totalSeconds = days * 24 * 3600 + hours * 3600 + mins * 60 + secs;
+            updateDisplay();
+        }
+
+        function start() {
+            if (!running && totalSeconds > 0) {
+                running = true;
+                timer = setInterval(countdown, 1000);
+            }
+        }
+
+        function stop() {
+            running = false;
+            clearInterval(timer);
+        }
+
+        function reset() {
+            running = false;
+            clearInterval(timer);
+            totalSeconds = 0;
+            document.getElementById('daysIn').value = 0;
+            document.getElementById('hoursIn').value = 0;
+            document.getElementById('minsIn').value = 0;
+            document.getElementById('secsIn').value = 0;
+            updateDisplay();
+        }
+
+        function countdown() {
+            if (totalSeconds > 0) {
+                totalSeconds--;
+                updateDisplay();
+            } else {
+                stop();
+            }
+        }
+
+        function updateDisplay() {
+            const days = Math.floor(totalSeconds / (24 * 3600));
+            const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
+            const mins = Math.floor((totalSeconds % 3600) / 60);
+            const secs = totalSeconds % 60;
+
+            document.getElementById('days').innerText = String(days).padStart(2, '0');
+            document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+            document.getElementById('mins').innerText = String(mins).padStart(2, '0');
+            document.getElementById('secs').innerText = String(secs).padStart(2, '0');
+        }
+
+        document.getElementById('setTimer').addEventListener('click', setTimer);
+        document.getElementById('start').addEventListener('click', start);
+        document.getElementById('stop').addEventListener('click', stop);
+        document.getElementById('reset').addEventListener('click', reset);
+    </script>
+</body>
+</html>
